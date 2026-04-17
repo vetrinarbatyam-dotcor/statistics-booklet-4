@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חוברת סטטיסטיקה והסתברות — מדריך למתחילים · בגרות 4 יח"ל</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#fdfaf5;
+  --paper:#ffffff;
+  --ink:#2d2926;
+  --muted:#6b6660;
+  --accent:#1e4d8b;
+  --accent-light:#e8f0fa;
+  --gold:#b8860b;
+  --gold-light:#fdf6e3;
+  --green:#2d7a3d;
+  --green-light:#eaf7ec;
+  --pink:#9d2a5f;
+  --pink-light:#fbeaf1;
+  --purple:#5b3a8f;
+  --purple-light:#f1ebfa;
+}
+
+html,body{background:var(--bg);font-family:'Heebo',system-ui,sans-serif;color:var(--ink);line-height:1.8;font-size:16px}
+
+.book{max-width:820px;margin:0 auto;padding:0 20px}
+
+.page{
+  background:var(--paper);
+  margin:24px 0;
+  padding:56px 68px;
+  box-shadow:0 4px 20px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.04);
+  border-radius:4px;
+  min-height:auto;
+  position:relative;
+}
+
+h1{font-size:2.6rem;font-weight:900;line-height:1.2;color:var(--accent);margin-bottom:1.2rem}
+h2{font-size:1.9rem;font-weight:800;color:var(--accent);margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:3px double var(--accent)}
+h3{font-size:1.35rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}
+h4{font-size:1.1rem;font-weight:700;color:var(--accent);margin:1rem 0 .5rem}
+
+p{margin-bottom:.9rem}
+strong{color:var(--accent);font-weight:700}
+em{color:var(--pink);font-style:normal;font-weight:600}
+
+ul,ol{padding-right:1.4em;margin:.6rem 0 1rem}
+li{margin-bottom:.4rem}
+
+.cover{
+  text-align:center;
+  min-height:700px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#1e4d8b 0%,#5b3a8f 50%,#9d2a5f 100%);
+  color:#fff;
+  border-radius:4px;
+}
+.cover h1{color:#fff;font-size:3.5rem;margin-bottom:.5rem;text-shadow:0 4px 20px rgba(0,0,0,.3)}
+.cover .sub{font-size:1.5rem;font-weight:300;margin-bottom:2rem;opacity:.95}
+.cover .mini{font-size:1.05rem;opacity:.85;margin-top:1rem;max-width:500px;line-height:1.6}
+.cover .divider{width:100px;height:3px;background:#fff;margin:2rem 0;opacity:.6}
+.cover .badges{margin-top:3rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.cover .badges span{background:rgba(255,255,255,.2);padding:.5em 1.2em;border-radius:999px;font-size:.9rem;font-weight:500;backdrop-filter:blur(10px)}
+
+.chapter-num{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  width:48px;height:48px;
+  border-radius:50%;
+  text-align:center;
+  line-height:48px;
+  font-weight:800;
+  font-size:1.3rem;
+  margin-left:12px;
+  vertical-align:middle;
+}
+
+.intro-box{
+  background:linear-gradient(135deg,var(--accent-light),var(--purple-light));
+  border-right:5px solid var(--accent);
+  padding:1.3rem 1.6rem;
+  border-radius:8px;
+  margin:1.3rem 0;
+  font-size:1.05rem;
+  line-height:1.9;
+}
+
+.story{
+  background:#fff8e8;
+  border:1px dashed var(--gold);
+  padding:1.2rem 1.5rem;
+  border-radius:8px;
+  margin:1.3rem 0;
+  position:relative;
+}
+.story::before{
+  content:"📖 הסיפור";
+  display:inline-block;
+  background:var(--gold);
+  color:#fff;
+  padding:.25em .8em;
+  border-radius:4px;
+  font-size:.85rem;
+  font-weight:700;
+  margin-bottom:.6rem;
+}
+
+.tip{
+  background:var(--green-light);
+  border-right:4px solid var(--green);
+  padding:1rem 1.4rem;
+  border-radius:6px;
+  margin:1rem 0;
+}
+.tip::before{
+  content:"💡 טיפ";
+  display:block;
+  font-weight:800;
+  color:var(--green);
+  font-size:.95rem;
+  margin-bottom:.4rem;
+}
+
+.warning{
+  background:var(--pink-light);
+  border-right:4px solid var(--pink);
+  padding:1rem 1.4rem;
+  border-radius:6px;
+  margin:1rem 0;
+}
+.warning::before{
+  content:"⚠️ שים לב!";
+  display:block;
+  font-weight:800;
+  color:var(--pink);
+  font-size:.95rem;
+  margin-bottom:.4rem;
+}
+
+.example{
+  background:#f0f7ff;
+  border:2px solid var(--accent);
+  padding:1.3rem 1.6rem;
+  border-radius:10px;
+  margin:1.3rem 0;
+}
+.example::before{
+  content:"✏️ דוגמה מלאה";
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  padding:.3em 1em;
+  border-radius:4px;
+  font-size:.88rem;
+  font-weight:700;
+  margin-bottom:.8rem;
+}
+
+.formula{
+  background:linear-gradient(135deg,#f5f1fa,#faf0f5);
+  border:1px solid var(--purple);
+  padding:1.2rem;
+  border-radius:10px;
+  margin:1rem 0;
+  text-align:center;
+  direction:ltr;
+}
+.formula .katex{font-size:1.3em}
+.formula-label{
+  display:block;
+  direction:rtl;
+  font-weight:700;
+  color:var(--purple);
+  font-size:.9rem;
+  margin-bottom:.5rem;
+}
+
+.step{
+  display:flex;
+  align-items:flex-start;
+  gap:1rem;
+  background:#fafaf7;
+  padding:.9rem 1.2rem;
+  border-radius:8px;
+  margin:.8rem 0;
+  border-right:3px solid var(--accent);
+}
+.step-num{
+  flex-shrink:0;
+  background:var(--accent);
+  color:#fff;
+  width:32px;height:32px;
+  border-radius:50%;
+  text-align:center;
+  line-height:32px;
+  font-weight:800;
+  font-size:.95rem;
+}
+.step-content{flex:1}
+
+.checkpoint{
+  background:linear-gradient(135deg,#fef3c7,#fde68a);
+  border:2px solid var(--gold);
+  padding:1.3rem 1.6rem;
+  border-radius:10px;
+  margin:1.5rem 0;
+}
+.checkpoint h4{color:var(--gold);margin-top:0}
+.checkpoint h4::before{content:"🎯 עצור וחשוב "}
+
+.answer{
+  background:#fff;
+  border:1px solid var(--gold);
+  border-radius:6px;
+  padding:.8rem 1.1rem;
+  margin-top:.8rem;
+  font-size:.95rem;
+}
+.answer::before{
+  content:"✓ תשובה: ";
+  color:var(--green);
+  font-weight:800;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:1.2rem 0;
+  background:#fff;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+}
+th,td{
+  padding:.8rem 1.1rem;
+  text-align:right;
+  border-bottom:1px solid #eee;
+}
+th{
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  font-size:.95rem;
+}
+tbody tr:nth-child(even){background:#fafaf7}
+tbody tr:hover{background:var(--accent-light)}
+
+.toc{
+  background:#fff;
+  padding:1.5rem 2rem;
+  border-radius:8px;
+  border:1px solid #e5e5e5;
+}
+.toc ol{padding-right:0;list-style:none;counter-reset:toc}
+.toc li{
+  counter-increment:toc;
+  padding:.7rem 0;
+  border-bottom:1px dotted #ddd;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.toc li:last-child{border-bottom:none}
+.toc li::before{
+  content:counter(toc);
+  background:var(--accent);
+  color:#fff;
+  width:32px;height:32px;
+  border-radius:50%;
+  text-align:center;
+  line-height:32px;
+  font-weight:800;
+  font-size:.9rem;
+  flex-shrink:0;
+}
+
+.cheatsheet{
+  background:linear-gradient(135deg,#1e4d8b,#5b3a8f);
+  color:#fff;
+  padding:2rem;
+  border-radius:12px;
+  margin:1.5rem 0;
+}
+.cheatsheet h3{color:#fff;border-bottom:2px solid rgba(255,255,255,.3);padding-bottom:.5rem;margin-top:1.5rem}
+.cheatsheet h3:first-child{margin-top:0}
+.cheatsheet .formula{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.cheatsheet .formula-label{color:#fde68a}
+.cheatsheet .katex{color:#fff}
+
+.page-num{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  color:var(--muted);
+  font-size:.8rem;
+}
+
+.tools-bar{
+  position:fixed;
+  top:20px;
+  left:20px;
+  display:flex;
+  gap:10px;
+  z-index:1000;
+}
+.tools-bar button{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+  font-family:inherit;
+  font-weight:600;
+  font-size:.9rem;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  transition:.2s;
+}
+.tools-bar button:hover{background:#163a6b;transform:translateY(-1px)}
+
+/* Print */
+@media print{
+  @page{size:A4;margin:18mm 16mm}
+  body{background:#fff;font-size:11pt;line-height:1.65}
+  .book{max-width:none;padding:0;margin:0}
+  .page{margin:0;padding:0;box-shadow:none;border-radius:0;page-break-after:always}
+  .page:last-child{page-break-after:auto}
+  .tools-bar{display:none}
+  h1{font-size:24pt}
+  h2{font-size:17pt;page-break-after:avoid}
+  h3{font-size:13pt;page-break-after:avoid}
+  .cover{background:linear-gradient(135deg,#1e4d8b,#5b3a8f,#9d2a5f)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;min-height:90vh}
+  .cover *{color:#fff!important}
+  .story,.tip,.warning,.example,.formula,.checkpoint,.cheatsheet,.toc,table,.intro-box,.step{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    page-break-inside:avoid;
+  }
+  .cheatsheet *{color:#fff!important}
+  .cheatsheet .formula-label{color:#fde68a!important}
+}
+</style>
+</head>
+<body>
+
+<div class="tools-bar">
+  <button onclick="window.print()">🖨️ הדפסה / שמירה כ-PDF</button>
+</div>
+
+<div class="book">
+
+<!-- ==================== COVER ==================== -->
+<div class="page cover">
+  <h1>סטטיסטיקה<br>והסתברות</h1>
+  <div class="divider"></div>
+  <div class="sub">חוברת מדריך למתחילים</div>
+  <div class="mini">גם אם אף פעם לא הבנת — החוברת הזאת תיקח אותך מאפס<br>עד רמה של בגרות 4 יחידות לימוד</div>
+  <div class="badges">
+    <span>📊 7 פרקים</span>
+    <span>✏️ דוגמאות מפורטות</span>
+    <span>🎯 תרגילי בדיקה</span>
+    <span>📖 כיתה י"א</span>
+  </div>
+</div>
+
+<!-- ==================== INTRO ==================== -->
+<div class="page">
+  <h1>שלום!</h1>
+  <div class="intro-box">
+    <p><strong>החוברת הזאת נכתבה במיוחד בשבילך</strong> — התלמיד שמגיע לסטטיסטיקה ומרגיש שזה "סינית". אל דאגה. עד סוף החוברת תבין הכל.</p>
+  </div>
+
+  <h3>איך להשתמש בחוברת:</h3>
+  <ul>
+    <li><strong>אל תדלג.</strong> כל פרק בונה על הקודם.</li>
+    <li><strong>תסמן במרקר</strong> את הנוסחאות — הן חוזרות בבגרות.</li>
+    <li>אחרי כל פרק יש קופסת <strong>"עצור וחשוב"</strong> — תענה ואז תבדוק.</li>
+    <li>בסוף יש <strong>דף נוסחאות מסכם</strong> + 3 תרגילי בגרות.</li>
+  </ul>
+
+  <h3>מה נלמד בפנים?</h3>
+  <div class="toc">
+    <ol>
+      <li>מדדי מרכז: ממוצע, חציון, שכיח</li>
+      <li>פיזור: שונות וסטיית תקן</li>
+      <li>ציון תקן (Z) — להשוות בין דברים שונים</li>
+      <li>הסתברות: הבסיס</li>
+      <li>הסתברות מותנית ועץ הסתברות</li>
+      <li>התפלגות בינומית</li>
+      <li>התפלגות נורמלית</li>
+    </ol>
+  </div>
+
+  <div class="tip">
+    עוד לא נעזר במחשבון? עכשיו הזמן. מחשבון מדעי פשוט יספיק לכל מה שנלמד.
+  </div>
+</div>
+
+<!-- ==================== CHAPTER 1 ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">1</span>ממוצע, חציון, שכיח</h1>
+  <p style="color:var(--muted);font-size:1.1rem">שלושה מדדי "מרכז" — שלוש דרכים לענות על השאלה: "איפה הנתונים נמצאים באמצע?"</p>
+
+  <h2>1.1 ממוצע (Mean)</h2>
+
+  <div class="story">
+    באת הביתה עם תעודה: 70, 80, 90, 85, 75, 100. אמא שואלת "איך אתה בכללי?" —
+    אתה עונה: <strong>"בממוצע 83"</strong>. איך חישבת? סכמת הכל וחילקת ב-6.
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">נוסחת הממוצע</span>
+    $\bar{x} = \dfrac{x_1 + x_2 + \ldots + x_n}{n} = \dfrac{\sum x_i}{n}$
+  </div>
+  <p>פשוט: <strong>סכום כל הערכים חלקי כמות הערכים</strong>. זהו.</p>
+
+  <div class="example">
+    <strong>נתונים:</strong> 70, 80, 90, 85, 75, 100<br>
+    <strong>סכום:</strong> 70+80+90+85+75+100 = 500<br>
+    <strong>כמות:</strong> n = 6<br>
+    <strong>ממוצע:</strong> 500 ÷ 6 ≈ <strong>83.33</strong>
+  </div>
+
+  <h2>1.2 חציון (Median)</h2>
+
+  <div class="story">
+    חמישה חברים עומדים בשורה לפי גובה. מי באמצע? — ה<strong>חציון</strong>.
+  </div>
+
+  <h3>איך מוצאים חציון?</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-content"><strong>ממיינים</strong> את הנתונים מהקטן לגדול.</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-content">אם <strong>n אי-זוגי</strong> — החציון הוא הערך באמצע.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-content">אם <strong>n זוגי</strong> — החציון הוא ממוצע של שני הערכים האמצעיים.</div></div>
+
+  <div class="example">
+    נתונים: 70, 80, 90, 85, 75, 100<br>
+    אחרי מיון: <strong>70, 75, 80, 85, 90, 100</strong><br>
+    n=6 (זוגי) → שני אמצעיים הם 80 ו-85<br>
+    <strong>חציון = (80+85)/2 = 82.5</strong>
+  </div>
+
+  <h2>1.3 שכיח (Mode)</h2>
+  <p>הערך ש<strong>מופיע הכי הרבה פעמים</strong>. פשוט.</p>
+
+  <div class="example">
+    נתונים: 3, 5, 5, 7, 8, 8, 8, 9<br>
+    המספר 8 מופיע 3 פעמים — הכי הרבה.<br>
+    <strong>שכיח = 8</strong>
+  </div>
+
+  <h2>1.4 מתי משתמשים במה?</h2>
+  <table>
+    <thead><tr><th>מתי?</th><th>במה להשתמש?</th></tr></thead>
+    <tbody>
+      <tr><td>אין ערכים חריגים, נתונים רגילים</td><td><strong>ממוצע</strong></td></tr>
+      <tr><td>יש ערכים חריגים מאד (למשל: 1, 2, 3, 4, 1000)</td><td><strong>חציון</strong></td></tr>
+      <tr><td>נתונים לא מספריים (צבעים, סוגים)</td><td><strong>שכיח</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning">
+    ערכים חריגים מעוותים את הממוצע! לדוגמה, אם במשרד 10 אנשים מרוויחים 10,000 ש"ח
+    והמנכ"ל מרוויח 200,000 — הממוצע יקפוץ ל-27,000, אבל <em>החציון יישאר 10,000</em>.
+    לכן לעיתים חציון "מספר יותר אמת".
+  </div>
+
+  <h2>1.5 ממוצע משוקלל</h2>
+  <p>כשלכל ערך יש "משקל" שונה (כמה פעמים הוא מופיע):</p>
+  <div class="formula">
+    <span class="formula-label">ממוצע משוקלל</span>
+    $\bar{x} = \dfrac{\sum f_i x_i}{\sum f_i}$
+  </div>
+  <p>כאן $f_i$ = השכיחות (משקל) של הערך $x_i$.</p>
+
+  <div class="example">
+    <strong>ציונים בכיתה:</strong><br>
+    ציון 70 — 5 תלמידים<br>
+    ציון 80 — 10 תלמידים<br>
+    ציון 90 — 5 תלמידים<br>
+    <strong>ממוצע = (70·5 + 80·10 + 90·5) / (5+10+5) = 1600 / 20 = 80</strong>
+  </div>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>נתונים: 4, 6, 6, 8, 10, 10, 10, 12. מצא ממוצע, חציון ושכיח.</p>
+    <div class="answer">
+      ממוצע = (4+6+6+8+10+10+10+12)/8 = 66/8 = 8.25 · חציון = (8+10)/2 = 9 · שכיח = 10
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER 2 ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">2</span>שונות וסטיית תקן</h1>
+  <p style="color:var(--muted);font-size:1.1rem">איך מודדים עד כמה הנתונים "מפוזרים"?</p>
+
+  <h2>2.1 הבעיה: ממוצע זה לא מספיק</h2>
+
+  <div class="story">
+    שתי כיתות עשו מבחן. שתיהן קיבלו ממוצע 80. האם הכיתות זהות?<br><br>
+    <strong>כיתה א':</strong> 75, 78, 80, 82, 85 — כולם קרובים ל-80.<br>
+    <strong>כיתה ב':</strong> 40, 60, 80, 100, 120 — פיזור ענק!<br><br>
+    שני ממוצעים זהים — אבל פיזור הפוך לחלוטין.
+  </div>
+
+  <p><strong>סטיית תקן</strong> מודדת כמה הנתונים מפוזרים סביב הממוצע. קטנה = מרוכזים, גדולה = פזורים.</p>
+
+  <h2>2.2 איך מחשבים? (הנוסחה הבסיסית)</h2>
+
+  <div class="formula">
+    <span class="formula-label">שונות</span>
+    $\sigma^2 = \dfrac{\sum (x_i - \bar{x})^2}{n}$
+  </div>
+  <div class="formula">
+    <span class="formula-label">סטיית תקן</span>
+    $\sigma = \sqrt{\sigma^2}$
+  </div>
+
+  <h3>הסבר צעד-צעד:</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-content">חישוב הממוצע $\bar{x}$.</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-content">לכל ערך מחשבים את ההפרש מהממוצע: $(x_i - \bar{x})$.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-content">מעלים בריבוע (כדי שההפרשים השליליים לא יבטלו את החיוביים).</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-content">ממוצע של הריבועים — זו השונות $\sigma^2$.</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-content">שורש → סטיית תקן $\sigma$.</div></div>
+
+  <div class="example">
+    <strong>נתונים:</strong> 2, 4, 4, 4, 5, 5, 7, 9<br>
+    <strong>ממוצע:</strong> (2+4+4+4+5+5+7+9)/8 = 40/8 = 5<br><br>
+    <strong>הפרשים בריבוע:</strong><br>
+    (2-5)² = 9, (4-5)² = 1 (×3), (4-5)² , (5-5)²=0 (×2), (7-5)²=4, (9-5)²=16<br>
+    סכום: 9 + 1+1+1 + 0+0 + 4 + 16 = 32<br><br>
+    <strong>שונות:</strong> 32/8 = 4<br>
+    <strong>סטיית תקן:</strong> √4 = <strong>2</strong>
+  </div>
+
+  <h2>2.3 נוסחה שימושית (חוסכת עבודה)</h2>
+
+  <div class="formula">
+    <span class="formula-label">נוסחה חלופית לשונות</span>
+    $\sigma^2 = \overline{x^2} - \bar{x}^2$
+  </div>
+  <p>כלומר: <strong>ממוצע הריבועים</strong> פחות <strong>ריבוע הממוצע</strong>.</p>
+
+  <div class="tip">
+    הנוסחה הזו הרבה יותר מהירה — במקום לחשב הפרשים, פשוט מחשבים ממוצע הריבועים וריבוע הממוצע.
+  </div>
+
+  <div class="example">
+    על אותם נתונים: 2, 4, 4, 4, 5, 5, 7, 9<br>
+    <strong>ריבועים:</strong> 4, 16, 16, 16, 25, 25, 49, 81<br>
+    <strong>ממוצע הריבועים:</strong> 232/8 = 29<br>
+    <strong>ריבוע הממוצע:</strong> 5² = 25<br>
+    <strong>שונות:</strong> 29 - 25 = 4 ✓ (זהה לתשובה הקודמת!)
+  </div>
+
+  <h2>2.4 תכונות חשובות (חוקי תקנון)</h2>
+
+  <div class="tip">
+    אם מוסיפים <strong>קבוע $c$</strong> לכל ערך:<br>
+    • הממוצע גדל ב-$c$<br>
+    • <strong>סטיית התקן לא משתנה</strong>
+  </div>
+
+  <div class="tip">
+    אם מכפילים כל ערך ב-<strong>קבוע $a$</strong>:<br>
+    • הממוצע מוכפל ב-$a$<br>
+    • סטיית התקן מוכפלת ב-$|a|$
+  </div>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>ממוצע הציונים בכיתה הוא 70 וסטיית התקן 8. המורה מחליט להוסיף 5 נקודות לכל תלמיד. מה הממוצע והסטייה החדשים?</p>
+    <div class="answer">
+      ממוצע חדש: 70+5 = <strong>75</strong> · סטיית תקן: נשארת <strong>8</strong> (קבוע לא משפיע על פיזור)
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER 3 ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">3</span>ציון תקן (Z-score)</h1>
+  <p style="color:var(--muted);font-size:1.1rem">איך להשוות בין "תפוחים לתפוזים".</p>
+
+  <h2>3.1 הבעיה</h2>
+  <div class="story">
+    קיבלת <strong>85</strong> במבחן מתמטיקה ו-<strong>75</strong> במבחן אנגלית. <em>באיזה מבחן הצלחת יותר?</em><br><br>
+    לא מספיק להסתכל על הציונים — צריך לדעת איך המבחנים ביחס לכיתה.
+  </div>
+
+  <h2>3.2 הפתרון: ציון תקן</h2>
+  <p>ציון תקן ($Z$) אומר <strong>כמה סטיות תקן</strong> הערך שלך רחוק מהממוצע.</p>
+
+  <div class="formula">
+    <span class="formula-label">ציון תקן</span>
+    $Z = \dfrac{x - \mu}{\sigma}$
+  </div>
+
+  <ul>
+    <li>$Z > 0$ — אתה <strong>מעל</strong> הממוצע</li>
+    <li>$Z < 0$ — אתה <strong>מתחת</strong> לממוצע</li>
+    <li>$Z = 0$ — אתה בדיוק על הממוצע</li>
+    <li>$|Z|$ גדול — אתה <em>רחוק</em> מהממוצע (חריג)</li>
+  </ul>
+
+  <div class="example">
+    <strong>מתמטיקה:</strong> ציון 85, ממוצע כיתה 80, סטיית תקן 5<br>
+    $Z_{\text{מתמטיקה}} = (85-80)/5 = 1$<br>
+    → סטיית תקן <strong>אחת</strong> מעל הממוצע.<br><br>
+    <strong>אנגלית:</strong> ציון 75, ממוצע כיתה 65, סטיית תקן 5<br>
+    $Z_{\text{אנגלית}} = (75-65)/5 = 2$<br>
+    → סטיית תקן <strong>שתיים</strong> מעל הממוצע.<br><br>
+    <strong>מסקנה: באנגלית הצלחת יותר ביחס לכיתה! ✨</strong>
+  </div>
+
+  <h2>3.3 למה זה כל כך חשוב?</h2>
+  <p>ציון תקן יופיע ב<strong>כל שאלה</strong> על התפלגות נורמלית בבגרות. ממירים את הערכים ל-Z, ואז משתמשים בטבלת $Z$ כדי לדעת הסתברויות. נראה בפרק 7.</p>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>גובהי תלמידים בכיתה: ממוצע 168 ס"מ, סטיית תקן 6 ס"מ. דני גבוה 180. מה ציון התקן שלו?</p>
+    <div class="answer">
+      Z = (180-168)/6 = 12/6 = <strong>2</strong> — דני נמצא 2 סטיות תקן מעל הממוצע
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER 4 ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">4</span>הסתברות — הבסיס</h1>
+  <p style="color:var(--muted);font-size:1.1rem">מה הסיכוי שמשהו יקרה? כל הכללים שצריך.</p>
+
+  <h2>4.1 הגדרה</h2>
+  <div class="story">
+    זורקים מטבע. יש 2 תוצאות אפשריות (עץ/פלי). התוצאה "עץ" היא 1 מתוך 2.<br>
+    <strong>ההסתברות ל-"עץ" = 1/2 = 0.5 = 50%.</strong>
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">הסתברות קלאסית</span>
+    $P(A) = \dfrac{\text{מספר תוצאות רצויות}}{\text{סך כל התוצאות}}$
+  </div>
+
+  <ul>
+    <li>הסתברות תמיד בין 0 ל-1 (או 0% ל-100%)</li>
+    <li>$P = 0$ → בלתי אפשרי · $P = 1$ → בטוח</li>
+    <li>סכום כל ההסתברויות של האפשרויות = 1</li>
+  </ul>
+
+  <h2>4.2 משלים</h2>
+  <p>המשלים של $A$ (מסומן $\bar{A}$) = כל מה ש<em>לא</em> $A$.</p>
+
+  <div class="formula">
+    $P(\bar{A}) = 1 - P(A)$
+  </div>
+
+  <div class="example">
+    זורקים קובייה — מה ההסתברות <em>לא</em> לקבל 6?<br>
+    $P(6) = 1/6$ → $P(\text{לא } 6) = 1 - 1/6 = 5/6$
+  </div>
+
+  <h2>4.3 איחוד — "או"</h2>
+  <p>$P(A \cup B)$ = ההסתברות ש-A או B (או שניהם) יקרו.</p>
+
+  <div class="formula">
+    $P(A \cup B) = P(A) + P(B) - P(A \cap B)$
+  </div>
+  <p>אם $A$ ו-$B$ <strong>זרים</strong> (לא יכולים לקרות ביחד): $P(A \cup B) = P(A) + P(B)$.</p>
+
+  <div class="example">
+    קובייה — מה ההסתברות לקבל 2 או 5?<br>
+    הם זרים → $P = 1/6 + 1/6 = 2/6 = 1/3$
+  </div>
+
+  <h2>4.4 חיתוך — "גם וגם"</h2>
+  <p>$P(A \cap B)$ = ההסתברות ש-A וגם B יקרו.</p>
+
+  <div class="warning">
+    אם $A$ ו-$B$ <strong>בלתי תלויים</strong>:<br>
+    $P(A \cap B) = P(A) \cdot P(B)$<br><br>
+    <em>בלתי תלויים = A לא משפיע על B.</em> לדוגמה: שתי זריקות של מטבע.<br>
+    זה <strong>לא</strong> אותו דבר כמו "זרים"!
+  </div>
+
+  <div class="example">
+    זורקים 2 מטבעות — מה ההסתברות ששניהם עץ?<br>
+    $P = (1/2) \cdot (1/2) = 1/4$
+  </div>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>זורקים קובייה. מה ההסתברות לקבל מספר זוגי או גדול מ-4?</p>
+    <div class="answer">
+      זוגי = {2,4,6} → 3/6. גדול מ-4 = {5,6} → 2/6. חיתוך (זוגי וגם >4) = {6} → 1/6.<br>
+      איחוד = 3/6 + 2/6 − 1/6 = <strong>4/6 = 2/3</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER 5 ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">5</span>הסתברות מותנית ועץ הסתברות</h1>
+  <p style="color:var(--muted);font-size:1.1rem">מה ההסתברות ל-A <em>בהינתן</em> שB כבר קרה?</p>
+
+  <h2>5.1 המושג</h2>
+  <div class="story">
+    בקופסה 10 כדורים: 6 אדומים, 4 כחולים. הוצאת כדור אדום ולא החזרת.<br>
+    <strong>בהינתן</strong> שהוצאת אדום — מה הסיכוי שהכדור הבא יהיה אדום?<br>
+    עכשיו נשארו 9 כדורים, 5 אדומים. לכן: 5/9.
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">הסתברות מותנית</span>
+    $P(A|B) = \dfrac{P(A \cap B)}{P(B)}$
+  </div>
+  <p>קוראים: "ההסתברות ל-A <strong>בהינתן</strong> B".</p>
+
+  <h2>5.2 כלל הכפל</h2>
+  <div class="formula">
+    $P(A \cap B) = P(B) \cdot P(A|B)$
+  </div>
+  <p>כלומר: A וגם B = B קודם, ואז A בהינתן B.</p>
+
+  <h2>5.3 עץ הסתברות</h2>
+  <p>הטכניקה הכי חשובה בפרק הזה! מציירים עץ, כל ענף = שלב. ההסתברות בסוף ענף = מכפלת כל ההסתברויות בדרך.</p>
+
+  <div class="example">
+    <strong>דוגמה:</strong> בקופסה 3 כדורים אדומים, 2 כחולים. מוציאים 2 כדורים, אחד אחרי השני, <em>בלי החזרה</em>.<br><br>
+    <strong>עץ:</strong><br>
+    • אדום ראשון: 3/5 · אדום שני בהינתן אדום: 2/4 → 3/5 · 2/4 = 6/20<br>
+    • אדום ראשון: 3/5 · כחול שני בהינתן אדום: 2/4 → 3/5 · 2/4 = 6/20<br>
+    • כחול ראשון: 2/5 · אדום שני בהינתן כחול: 3/4 → 2/5 · 3/4 = 6/20<br>
+    • כחול ראשון: 2/5 · כחול שני בהינתן כחול: 1/4 → 2/5 · 1/4 = 2/20<br><br>
+    <strong>סה"כ: 6+6+6+2 = 20/20 = 1 ✓</strong> (תמיד לבדוק!)
+  </div>
+
+  <h2>5.4 נוסחת ההסתברות השלמה</h2>
+  <p>אם אנחנו יודעים את ההסתברויות בהינתן כל "ענף":</p>
+  <div class="formula">
+    $P(B) = P(B|A) \cdot P(A) + P(B|\bar{A}) \cdot P(\bar{A})$
+  </div>
+
+  <h2>5.5 נוסחת בייס</h2>
+  <p>הופכת את הכיוון: ממסקנה לסיבה.</p>
+  <div class="formula">
+    $P(A|B) = \dfrac{P(B|A) \cdot P(A)}{P(B)}$
+  </div>
+
+  <div class="example">
+    <strong>בדיקה רפואית:</strong> 1% מהאוכלוסייה חולה. הבדיקה מזהה נכון 95% מהחולים, ומטעה (חיובי כוזב) ב-5% מהבריאים.<br>
+    אדם קיבל תוצאה חיובית — מה הסיכוי שהוא באמת חולה?<br><br>
+    $P(B) = 0.95 \cdot 0.01 + 0.05 \cdot 0.99 = 0.0095 + 0.0495 = 0.059$<br>
+    $P(\text{חולה}|B) = (0.95 \cdot 0.01)/0.059 \approx 0.161$<br>
+    <strong>רק 16%!</strong> מפתיע — אבל הגיוני: יש הרבה יותר בריאים, אז גם 5% מהם גדול ממספר החולים הנכון.
+  </div>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>בקופסה 4 כדורים לבנים ו-6 שחורים. מוציאים 2 ללא החזרה. מה ההסתברות ששניהם שחורים?</p>
+    <div class="answer">
+      $P = (6/10) \cdot (5/9) = 30/90 = $ <strong>1/3</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER 6 ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">6</span>התפלגות בינומית</h1>
+  <p style="color:var(--muted);font-size:1.1rem">כמה "הצלחות" יהיו כשחוזרים על אותו ניסוי כמה פעמים?</p>
+
+  <h2>6.1 מתי משתמשים?</h2>
+  <p>כאשר יש לנו ניסוי שעונה על <strong>4 תנאים</strong>:</p>
+  <ol>
+    <li>$n$ ניסויים <strong>בלתי תלויים</strong></li>
+    <li>כל ניסוי יש לו בדיוק <strong>2 תוצאות</strong> אפשריות (הצלחה/כשלון)</li>
+    <li>הסתברות ההצלחה <strong>קבועה</strong> בכל ניסוי — $p$</li>
+    <li>סופרים כמה הצלחות סה"כ — $X$</li>
+  </ol>
+
+  <div class="story">
+    דוגמה קלאסית: זריקת מטבע 10 פעמים — כמה "עצים" יצאו?<br>
+    $n=10$, $p=0.5$ (הסתברות עץ), $X$ = מספר עצים.
+  </div>
+
+  <h2>6.2 הנוסחה</h2>
+  <div class="formula">
+    <span class="formula-label">הסתברות בדיוק ל-k הצלחות מתוך n</span>
+    $P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$
+  </div>
+
+  <h3>מה זה $\binom{n}{k}$?</h3>
+  <p>"n מעל k" — כמה דרכים לבחור $k$ הצלחות מתוך $n$ ניסויים.</p>
+  <div class="formula">
+    $\binom{n}{k} = \dfrac{n!}{k!(n-k)!}$
+  </div>
+  <p>תזכורת: $n! = n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 1$. למשל $5! = 120$.</p>
+
+  <div class="example">
+    <strong>זורקים מטבע 5 פעמים. מה הסיכוי לבדיוק 3 עצים?</strong><br>
+    $n=5, k=3, p=0.5$<br>
+    $\binom{5}{3} = 10$<br>
+    $P = 10 \cdot 0.5^3 \cdot 0.5^2 = 10 \cdot 0.125 \cdot 0.25 = \mathbf{0.3125}$
+  </div>
+
+  <h2>6.3 תוחלת וסטיית תקן</h2>
+  <p>מה המספר הממוצע של הצלחות? מה הפיזור?</p>
+
+  <div class="formula">
+    <span class="formula-label">תוחלת</span>
+    $E(X) = np$
+  </div>
+  <div class="formula">
+    <span class="formula-label">שונות</span>
+    $V(X) = np(1-p)$
+  </div>
+  <div class="formula">
+    <span class="formula-label">סטיית תקן</span>
+    $\sigma = \sqrt{np(1-p)}$
+  </div>
+
+  <div class="example">
+    100 זריקות מטבע: $E(X) = 100 \cdot 0.5 = 50$ עצים בממוצע.<br>
+    $\sigma = \sqrt{100 \cdot 0.5 \cdot 0.5} = \sqrt{25} = 5$.
+  </div>
+
+  <h2>6.4 "לפחות" / "לכל היותר" — טיפ חשוב</h2>
+  <div class="tip">
+    <strong>"לפחות 2 הצלחות":</strong><br>
+    $P(X \geq 2) = 1 - P(X=0) - P(X=1)$<br><br>
+    קל יותר לחשב את המשלים ולהחסיר!
+  </div>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>זורקים קובייה 4 פעמים. מה ההסתברות לקבל בדיוק 2 פעמים "6"?</p>
+    <div class="answer">
+      $n=4, k=2, p=1/6$<br>
+      $P = \binom{4}{2}(1/6)^2(5/6)^2 = 6 \cdot (1/36) \cdot (25/36) = 150/1296 \approx$ <strong>0.1157</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER 7 ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">7</span>התפלגות נורמלית</h1>
+  <p style="color:var(--muted);font-size:1.1rem">"הפעמון" — ההתפלגות החשובה ביותר בטבע.</p>
+
+  <h2>7.1 מה זה?</h2>
+  <div class="story">
+    גבהים של אנשים, ציונים בבגרות, משקלי תפוחים — הרבה מאוד דברים בטבע מתפלגים לפי <strong>עקומת פעמון</strong>:<br>
+    סביב הממוצע יש הרבה, רחוק מהממוצע יש מעט.
+  </div>
+
+  <p>כל התפלגות נורמלית מתוארת ב-<strong>2 פרמטרים</strong>:</p>
+  <ul>
+    <li>$\mu$ — ממוצע (איפה מרכז הפעמון)</li>
+    <li>$\sigma$ — סטיית תקן (כמה רחב הפעמון)</li>
+  </ul>
+  <p>כותבים: $X \sim N(\mu, \sigma^2)$.</p>
+
+  <h2>7.2 כלל 68-95-99.7</h2>
+  <div class="tip">
+    • <strong>כ-68%</strong> מהנתונים בטווח $\mu \pm \sigma$ (סטייה אחת)<br>
+    • <strong>כ-95%</strong> בטווח $\mu \pm 2\sigma$<br>
+    • <strong>כ-99.7%</strong> בטווח $\mu \pm 3\sigma$
+  </div>
+
+  <h2>7.3 התפלגות נורמלית תקנית</h2>
+  <p>ההתפלגות שכולם מודדים לפיה: $\mu=0, \sigma=1$. מסמנים $Z$.</p>
+  <p><strong>תמיד ממירים את ה-X ל-Z לפני החישוב:</strong></p>
+
+  <div class="formula">
+    $Z = \dfrac{X - \mu}{\sigma}$
+  </div>
+
+  <h2>7.4 איך קוראים טבלת Z</h2>
+  <p>הטבלה נותנת $\Phi(z) = P(Z \leq z)$ — ההסתברות ש-Z קטן או שווה ל-$z$.</p>
+
+  <h3>כללים שימושיים:</h3>
+  <ul>
+    <li>$P(Z > z) = 1 - \Phi(z)$</li>
+    <li>$P(Z < -z) = 1 - \Phi(z)$ (בגלל סימטריה)</li>
+    <li>$P(a < Z < b) = \Phi(b) - \Phi(a)$</li>
+  </ul>
+
+  <div class="example">
+    <strong>גובהי תלמידות בכיתה ט':</strong> $\mu=160$ ס"מ, $\sigma=5$ ס"מ.<br>
+    מה ההסתברות שגובהה של תלמידה אקראית יהיה בין 155 ל-170?<br><br>
+    <strong>המרה ל-Z:</strong><br>
+    $Z_1 = (155-160)/5 = -1$<br>
+    $Z_2 = (170-160)/5 = 2$<br><br>
+    <strong>מהטבלה:</strong><br>
+    $\Phi(2) = 0.9772$<br>
+    $\Phi(-1) = 1 - \Phi(1) = 1 - 0.8413 = 0.1587$<br><br>
+    $P = 0.9772 - 0.1587 = \mathbf{0.8185}$ (כ-82%)
+  </div>
+
+  <h2>7.5 דגימה — ממוצע של מדגם</h2>
+  <p>אם לוקחים <strong>מדגם בגודל $n$</strong> מאוכלוסייה עם $\mu, \sigma$ — גם ממוצע המדגם $\bar{X}$ מתפלג נורמלית:</p>
+
+  <div class="formula">
+    $\bar{X} \sim N\left(\mu, \dfrac{\sigma^2}{n}\right)$
+  </div>
+
+  <ul>
+    <li>אותו ממוצע $\mu$</li>
+    <li>סטיית תקן קטנה יותר: $\dfrac{\sigma}{\sqrt{n}}$ (ככל ש-$n$ גדול, הממוצע יותר מדויק)</li>
+  </ul>
+
+  <div class="example">
+    $X \sim N(100, 10^2)$. מה ההסתברות שממוצע של 25 תצפיות יהיה מעל 103?<br><br>
+    $\sigma_{\bar{X}} = 10/\sqrt{25} = 2$<br>
+    $Z = (103-100)/2 = 1.5$<br>
+    $P = 1 - \Phi(1.5) = 1 - 0.9332 = \mathbf{0.0668}$
+  </div>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>$X \sim N(50, 4^2)$. מה $P(X > 58)$?</p>
+    <div class="answer">
+      $Z = (58-50)/4 = 2$. $P(Z>2) = 1 - 0.9772 = $ <strong>0.0228</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHEATSHEET ==================== -->
+<div class="page">
+  <h1>דף נוסחאות מסכם 📋</h1>
+  <p>הדפס את הדף הזה ותלה מעל השולחן!</p>
+
+  <div class="cheatsheet">
+    <h3>סטטיסטיקה תיאורית</h3>
+    <div class="formula"><span class="formula-label">ממוצע</span>$\bar{x} = \dfrac{\sum x_i}{n}$</div>
+    <div class="formula"><span class="formula-label">שונות</span>$\sigma^2 = \dfrac{\sum(x_i-\bar{x})^2}{n} = \overline{x^2} - \bar{x}^2$</div>
+    <div class="formula"><span class="formula-label">סטיית תקן</span>$\sigma = \sqrt{\sigma^2}$</div>
+    <div class="formula"><span class="formula-label">ציון תקן</span>$Z = \dfrac{x-\mu}{\sigma}$</div>
+
+    <h3>הסתברות</h3>
+    <div class="formula"><span class="formula-label">משלים</span>$P(\bar{A}) = 1 - P(A)$</div>
+    <div class="formula"><span class="formula-label">איחוד</span>$P(A \cup B) = P(A) + P(B) - P(A \cap B)$</div>
+    <div class="formula"><span class="formula-label">חיתוך (ב"ת)</span>$P(A \cap B) = P(A) \cdot P(B)$</div>
+    <div class="formula"><span class="formula-label">מותנית</span>$P(A|B) = \dfrac{P(A \cap B)}{P(B)}$</div>
+    <div class="formula"><span class="formula-label">בייס</span>$P(A|B) = \dfrac{P(B|A)P(A)}{P(B)}$</div>
+
+    <h3>בינומית</h3>
+    <div class="formula">$P(X=k) = \binom{n}{k}p^k(1-p)^{n-k}$</div>
+    <div class="formula">$E(X)=np \quad \sigma=\sqrt{np(1-p)}$</div>
+
+    <h3>נורמלית</h3>
+    <div class="formula">$Z = \dfrac{X-\mu}{\sigma} \quad \bar{X}\sim N\left(\mu,\dfrac{\sigma^2}{n}\right)$</div>
+  </div>
+
+  <div class="tip">
+    <strong>כללי אצבע:</strong><br>
+    • כלל 68-95-99.7 למרחקים סטנדרטיים<br>
+    • "לפחות" → השתמש במשלים<br>
+    • תמיד תקנן ל-Z לפני שימוש בטבלה<br>
+    • בעץ הסתברות: תמיד לבדוק שסכום ההסתברויות = 1
+  </div>
+</div>
+
+<!-- ==================== EXERCISES ==================== -->
+<div class="page">
+  <h1>תרגילי בגרות לדוגמה</h1>
+  <p>3 שאלות בסגנון בגרות — עם פתרון מלא. כסה את הפתרון, פתור לבד, ואז בדוק.</p>
+
+  <h2>תרגיל 1 — נורמלית</h2>
+  <div class="example" style="background:#fff">
+    משקלי תפוחים מתפלגים נורמלית: $\mu=180$ גרם, $\sigma=20$ גרם.<br>
+    א. מה ההסתברות שתפוח אקראי ישקול יותר מ-200 גרם?<br>
+    ב. מה ההסתברות שתפוח ישקול בין 160 ל-210 גרם?
+  </div>
+  <h4>פתרון:</h4>
+  <div class="step"><div class="step-num">א</div><div class="step-content">
+    $Z = (200-180)/20 = 1$<br>
+    $P(X>200) = 1-\Phi(1) = 1-0.8413 = \mathbf{0.1587}$
+  </div></div>
+  <div class="step"><div class="step-num">ב</div><div class="step-content">
+    $Z_1 = -1, Z_2 = 1.5$<br>
+    $P = \Phi(1.5)-\Phi(-1) = 0.9332-0.1587 = \mathbf{0.7745}$
+  </div></div>
+
+  <h2>תרגיל 2 — בייס</h2>
+  <div class="example" style="background:#fff">
+    במפעל 60% מהרכיבים ממכונה A, 40% מ-B. 3% מרכיבי A פגומים, 5% מרכיבי B.<br>
+    א. מה ההסתברות שרכיב אקראי פגום?<br>
+    ב. רכיב פגום — מה הסיכוי שממכונה B?
+  </div>
+  <h4>פתרון:</h4>
+  <div class="step"><div class="step-num">א</div><div class="step-content">
+    $P(\text{פגום}) = 0.6 \cdot 0.03 + 0.4 \cdot 0.05 = 0.018 + 0.020 = \mathbf{0.038}$
+  </div></div>
+  <div class="step"><div class="step-num">ב</div><div class="step-content">
+    $P(B|\text{פגום}) = (0.4 \cdot 0.05)/0.038 = 0.020/0.038 \approx \mathbf{0.5263}$
+  </div></div>
+
+  <h2>תרגיל 3 — בינומית</h2>
+  <div class="example" style="background:#fff">
+    20% מהצרכנים מעדיפים מותג X. בוחרים 10 באקראי.<br>
+    א. בדיוק 3 מעדיפים? · ב. לפחות 2 מעדיפים? · ג. תוחלת וסטיית תקן?
+  </div>
+  <h4>פתרון:</h4>
+  <div class="step"><div class="step-num">א</div><div class="step-content">
+    $P(X=3) = \binom{10}{3}(0.2)^3(0.8)^7 = 120 \cdot 0.008 \cdot 0.2097 \approx \mathbf{0.2013}$
+  </div></div>
+  <div class="step"><div class="step-num">ב</div><div class="step-content">
+    $P(X=0) = 0.8^{10} \approx 0.1074$<br>
+    $P(X=1) = 10 \cdot 0.2 \cdot 0.8^9 \approx 0.2684$<br>
+    $P(X \geq 2) = 1 - 0.1074 - 0.2684 = \mathbf{0.6242}$
+  </div></div>
+  <div class="step"><div class="step-num">ג</div><div class="step-content">
+    $E(X) = 10 \cdot 0.2 = \mathbf{2}$<br>
+    $\sigma = \sqrt{10 \cdot 0.2 \cdot 0.8} = \sqrt{1.6} \approx \mathbf{1.265}$
+  </div></div>
+
+  <div class="intro-box" style="margin-top:2rem;text-align:center">
+    <strong style="font-size:1.3rem">🎓 בהצלחה בבגרות!</strong><br>
+    זכרו: סטטיסטיקה היא על <em>הבנה</em> — לא על שינון. אם הבנת את ה"למה" מאחורי כל נוסחה — הצלחת.
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>
