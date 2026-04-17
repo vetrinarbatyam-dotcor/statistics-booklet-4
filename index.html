@@ -372,7 +372,7 @@ tbody tr:hover{background:var(--accent-light)}
   <div class="sub">חוברת מדריך למתחילים</div>
   <div class="mini">גם אם אף פעם לא הבנת — החוברת הזאת תיקח אותך מאפס<br>עד רמה של בגרות 4 יחידות לימוד</div>
   <div class="badges">
-    <span>📊 7 פרקים</span>
+    <span>📊 8 פרקים</span>
     <span>✏️ דוגמאות מפורטות</span>
     <span>🎯 תרגילי בדיקה</span>
     <span>📖 כיתה י"א</span>
@@ -404,6 +404,7 @@ tbody tr:hover{background:var(--accent-light)}
       <li>הסתברות מותנית ועץ הסתברות</li>
       <li>התפלגות בינומית</li>
       <li>התפלגות נורמלית</li>
+      <li>רגרסיה לינארית ומקדם מתאם</li>
     </ol>
   </div>
 
@@ -938,6 +939,143 @@ tbody tr:hover{background:var(--accent-light)}
   </div>
 </div>
 
+<!-- ==================== CHAPTER 8: REGRESSION ==================== -->
+<div class="page">
+  <h1><span class="chapter-num">8</span>רגרסיה לינארית ומקדם מתאם</h1>
+  <p style="color:var(--muted);font-size:1.1rem">מציאת קו ישר שיתאר את הקשר בין שני משתנים — וחיזוי ערכים חדשים.</p>
+
+  <h2>8.1 מה זה רגרסיה?</h2>
+
+  <div class="story">
+    אספת נתונים של תלמידים: <strong>כמה שעות למדו למבחן</strong> (x) ו<strong>הציון שקיבלו</strong> (y).<br>
+    מתקבלת שאלה: האם יש קשר? ואם כן — אם דני ילמד 4.5 שעות, איזה ציון צפוי לו?<br><br>
+    <strong>רגרסיה לינארית</strong> עונה לשתי השאלות: היא מוצאת את הקו הישר $y = ax + b$ שהכי מתאר את הנתונים.
+  </div>
+
+  <p>למה שימושי?</p>
+  <ul>
+    <li><strong>להבין את הקשר</strong> בין שני משתנים (חיובי? שלילי? חזק? חלש?)</li>
+    <li><strong>לחזות</strong> ערכים חדשים בהתבסס על הקשר שמצאנו</li>
+  </ul>
+
+  <h2>8.2 דיאגרמת פיזור (Scatter Plot)</h2>
+  <p>לפני הכל — מציירים. כל נקודה היא תצפית אחת $(x_i, y_i)$. מסתכלים על "הצורה":</p>
+  <ul>
+    <li><strong>עולה (↗):</strong> כש-x גדל, y גם גדל → קשר חיובי</li>
+    <li><strong>יורדת (↘):</strong> כש-x גדל, y קטן → קשר שלילי</li>
+    <li><strong>בלגן:</strong> אין קשר לינארי</li>
+  </ul>
+
+  <h2>8.3 מקדם המתאם (r)</h2>
+  <p>זה המספר ש<strong>מודד את חוזק וכיוון</strong> הקשר הלינארי.</p>
+
+  <div class="formula">
+    <span class="formula-label">מקדם המתאם</span>
+    $r = \dfrac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \cdot \sum (y_i - \bar{y})^2}}$
+  </div>
+
+  <p>או בנוסחה שקולה (עם שונות משותפת $\text{Cov}$):</p>
+  <div class="formula">
+    $r = \dfrac{\text{Cov}(x,y)}{\sigma_x \cdot \sigma_y}$ , &nbsp; $\text{Cov}(x,y) = \overline{xy} - \bar{x}\cdot\bar{y}$
+  </div>
+
+  <h3>איך קוראים את r?</h3>
+  <table>
+    <thead><tr><th>ערך r</th><th>משמעות</th></tr></thead>
+    <tbody>
+      <tr><td>r = 1</td><td>קשר חיובי <strong>מושלם</strong> — כל הנקודות על קו עולה</td></tr>
+      <tr><td>r = -1</td><td>קשר שלילי מושלם — כל הנקודות על קו יורד</td></tr>
+      <tr><td>r = 0</td><td>אין קשר לינארי</td></tr>
+      <tr><td>|r| > 0.7</td><td>קשר <strong>חזק</strong></td></tr>
+      <tr><td>0.3 < |r| < 0.7</td><td>קשר בינוני</td></tr>
+      <tr><td>|r| < 0.3</td><td>קשר חלש</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning">
+    <strong>r תמיד בטווח [-1, 1]</strong>. אם חישבת וקיבלת 1.5 — יש טעות!
+  </div>
+
+  <h2>8.4 תכונות חשובות של r</h2>
+  <div class="tip">
+    <strong>r לא משתנה</strong> אם:<br>
+    • מוסיפים קבוע לכל ה-x או לכל ה-y<br>
+    • מכפילים את כל ה-x (או y) בקבוע חיובי<br><br>
+    <strong>r מחליף סימן</strong> אם מכפילים ב-קבוע <em>שלילי</em>.
+  </div>
+
+  <h2>8.5 קו הרגרסיה y על x</h2>
+  <p>הקו הישר $y = ax + b$ שממזער את סכום ריבועי ההפרשים מהנקודות (שיטת הריבועים הפחותים).</p>
+
+  <div class="formula">
+    <span class="formula-label">שיפוע (slope)</span>
+    $a = \dfrac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2} = r \cdot \dfrac{\sigma_y}{\sigma_x}$
+  </div>
+  <div class="formula">
+    <span class="formula-label">חיתוך עם ציר y</span>
+    $b = \bar{y} - a \cdot \bar{x}$
+  </div>
+
+  <div class="warning">
+    <strong>תכונה קריטית:</strong> קו הרגרסיה <em>תמיד</em> עובר דרך הנקודה $(\bar{x}, \bar{y})$.<br>
+    אם יש לך את המשוואה ואת $\bar{x}$ — אפשר לחלץ את $\bar{y}$ בלי חישוב נוסף!
+  </div>
+
+  <h2>8.6 דוגמה מלאה — חישוב מ-א' עד ת'</h2>
+  <div class="example">
+    <strong>נתונים:</strong> 5 תלמידים — שעות לימוד (x) וציון (y):<br>
+    (2, 60), (3, 70), (4, 75), (5, 85), (6, 90)<br><br>
+
+    <strong>שלב 1 — ממוצעים:</strong><br>
+    $\bar{x} = (2+3+4+5+6)/5 = 4$<br>
+    $\bar{y} = (60+70+75+85+90)/5 = 76$<br><br>
+
+    <strong>שלב 2 — טבלת עזר:</strong>
+  </div>
+
+  <table>
+    <thead><tr><th>x</th><th>y</th><th>$x-\bar{x}$</th><th>$y-\bar{y}$</th><th>$(x-\bar{x})(y-\bar{y})$</th><th>$(x-\bar{x})^2$</th><th>$(y-\bar{y})^2$</th></tr></thead>
+    <tbody>
+      <tr><td>2</td><td>60</td><td>-2</td><td>-16</td><td>32</td><td>4</td><td>256</td></tr>
+      <tr><td>3</td><td>70</td><td>-1</td><td>-6</td><td>6</td><td>1</td><td>36</td></tr>
+      <tr><td>4</td><td>75</td><td>0</td><td>-1</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><td>5</td><td>85</td><td>1</td><td>9</td><td>9</td><td>1</td><td>81</td></tr>
+      <tr><td>6</td><td>90</td><td>2</td><td>14</td><td>28</td><td>4</td><td>196</td></tr>
+      <tr style="background:#fff8e8;font-weight:700"><td>סה"כ</td><td></td><td></td><td></td><td>75</td><td>10</td><td>570</td></tr>
+    </tbody>
+  </table>
+
+  <div class="example">
+    <strong>שלב 3 — שיפוע:</strong><br>
+    $a = 75/10 = \mathbf{7.5}$<br><br>
+    <strong>שלב 4 — חיתוך:</strong><br>
+    $b = 76 - 7.5 \cdot 4 = 76 - 30 = \mathbf{46}$<br><br>
+    <strong>משוואת קו הרגרסיה:</strong><br>
+    <span style="font-size:1.2em">$\boxed{y = 7.5x + 46}$</span><br><br>
+    <strong>שלב 5 — מקדם המתאם:</strong><br>
+    $r = 75 / \sqrt{10 \cdot 570} = 75 / \sqrt{5700} \approx 75/75.5 \approx \mathbf{0.993}$<br>
+    → קשר חיובי <em>חזק מאד</em>. כמעט מושלם!<br><br>
+    <strong>שלב 6 — חיזוי:</strong> תלמיד למד 4.5 שעות:<br>
+    $y = 7.5 \cdot 4.5 + 46 = 33.75 + 46 = \mathbf{79.75}$
+  </div>
+
+  <h2>8.7 חיזוי — מתי זה אמין?</h2>
+  <div class="tip">
+    חיזוי אמין רק <strong>בטווח הנתונים</strong> שיש לך.<br>
+    בדוגמה: הנתונים היו 2-6 שעות. חיזוי ל-3 שעות? אמין. חיזוי ל-20 שעות? לא אמין (מחוץ לטווח).
+  </div>
+
+  <div class="checkpoint">
+    <h4></h4>
+    <p>נתון: $\bar{x}=10, \bar{y}=50, \sigma_x=2, \sigma_y=6, r=0.8$. מה משוואת קו הרגרסיה y על x?</p>
+    <div class="answer">
+      $a = r \cdot \sigma_y/\sigma_x = 0.8 \cdot 6/2 = 2.4$<br>
+      $b = 50 - 2.4 \cdot 10 = 50 - 24 = 26$<br>
+      → <strong>$y = 2.4x + 26$</strong>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== CHEATSHEET ==================== -->
 <div class="page">
   <h1>דף נוסחאות מסכם 📋</h1>
@@ -963,6 +1101,11 @@ tbody tr:hover{background:var(--accent-light)}
 
     <h3>נורמלית</h3>
     <div class="formula">$Z = \dfrac{X-\mu}{\sigma} \quad \bar{X}\sim N\left(\mu,\dfrac{\sigma^2}{n}\right)$</div>
+
+    <h3>רגרסיה ומתאם</h3>
+    <div class="formula"><span class="formula-label">מקדם מתאם</span>$r = \dfrac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2 \sum(y_i-\bar{y})^2}} = \dfrac{\text{Cov}(x,y)}{\sigma_x \sigma_y}$</div>
+    <div class="formula"><span class="formula-label">שיפוע קו רגרסיה</span>$a = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sum(x_i-\bar{x})^2} = r \cdot \dfrac{\sigma_y}{\sigma_x}$</div>
+    <div class="formula"><span class="formula-label">חיתוך</span>$b = \bar{y} - a\bar{x}$ &nbsp;·&nbsp; הקו עובר דרך $(\bar{x},\bar{y})$</div>
   </div>
 
   <div class="tip">
@@ -1031,6 +1174,112 @@ tbody tr:hover{background:var(--accent-light)}
   <div class="intro-box" style="margin-top:2rem;text-align:center">
     <strong style="font-size:1.3rem">🎓 בהצלחה בבגרות!</strong><br>
     זכרו: סטטיסטיקה היא על <em>הבנה</em> — לא על שינון. אם הבנת את ה"למה" מאחורי כל נוסחה — הצלחת.
+  </div>
+</div>
+
+<!-- ==================== REGRESSION EXERCISES ==================== -->
+<div class="page">
+  <h1>תרגילי בגרות — רגרסיה</h1>
+  <p>4 שאלות בסגנון בגרות 4 יח"ל עם פתרונות מפורטים.</p>
+
+  <h2>תרגיל 1 — חישוב r וקו הרגרסיה</h2>
+  <div class="example" style="background:#fff">
+    חברה בדקה קשר בין <strong>מספר פרסומים בעיתון</strong> (x) ל<strong>מכירות באלפי ש"ח</strong> (y) במשך 6 שבועות:<br>
+    (1, 20), (2, 30), (3, 35), (4, 45), (5, 55), (6, 65)<br><br>
+    א. חשב את $\bar{x}, \bar{y}$.<br>
+    ב. מצא את משוואת קו הרגרסיה y על x.<br>
+    ג. חשב את מקדם המתאם r וקבע את עוצמת הקשר.<br>
+    ד. חזה את המכירות עבור 7 פרסומים.
+  </div>
+  <h4>פתרון:</h4>
+  <div class="step"><div class="step-num">א</div><div class="step-content">
+    $\bar{x} = (1+2+3+4+5+6)/6 = 21/6 = 3.5$<br>
+    $\bar{y} = (20+30+35+45+55+65)/6 = 250/6 \approx 41.67$
+  </div></div>
+  <div class="step"><div class="step-num">ב</div><div class="step-content">
+    חישוב: $\sum(x-\bar{x})^2 = 17.5$ , $\sum(x-\bar{x})(y-\bar{y}) = 152.5$<br>
+    $a = 152.5/17.5 \approx \mathbf{8.71}$<br>
+    $b = 41.67 - 8.71 \cdot 3.5 \approx 41.67 - 30.5 \approx \mathbf{11.17}$<br>
+    → <strong>$y = 8.71x + 11.17$</strong>
+  </div></div>
+  <div class="step"><div class="step-num">ג</div><div class="step-content">
+    $\sum(y-\bar{y})^2 \approx 1358.33$<br>
+    $r = 152.5 / \sqrt{17.5 \cdot 1358.33} \approx 152.5/154.2 \approx \mathbf{0.989}$<br>
+    → קשר חיובי <em>חזק מאד</em> (כמעט מושלם).
+  </div></div>
+  <div class="step"><div class="step-num">ד</div><div class="step-content">
+    $y = 8.71 \cdot 7 + 11.17 = 60.97 + 11.17 \approx \mathbf{72.14}$ אלפי ש"ח
+  </div></div>
+
+  <h2>תרגיל 2 — שימוש בפרמטרים סטטיסטיים</h2>
+  <div class="example" style="background:#fff">
+    במחקר על 50 תלמידים נמדדו שעות לימוד שבועיות (x) וציון שנתי (y). התקבלו הנתונים הבאים:<br>
+    $\bar{x} = 15, \bar{y} = 80, \sigma_x = 4, \sigma_y = 10, r = 0.75$<br><br>
+    א. מצא את שיפוע קו הרגרסיה y על x.<br>
+    ב. מצא את משוואת קו הרגרסיה.<br>
+    ג. חזה ציון של תלמיד שלמד 18 שעות.
+  </div>
+  <h4>פתרון:</h4>
+  <div class="step"><div class="step-num">א</div><div class="step-content">
+    $a = r \cdot \sigma_y/\sigma_x = 0.75 \cdot 10/4 = 0.75 \cdot 2.5 = \mathbf{1.875}$
+  </div></div>
+  <div class="step"><div class="step-num">ב</div><div class="step-content">
+    $b = \bar{y} - a\bar{x} = 80 - 1.875 \cdot 15 = 80 - 28.125 = \mathbf{51.875}$<br>
+    → <strong>$y = 1.875x + 51.875$</strong>
+  </div></div>
+  <div class="step"><div class="step-num">ג</div><div class="step-content">
+    $y = 1.875 \cdot 18 + 51.875 = 33.75 + 51.875 = \mathbf{85.625}$
+  </div></div>
+
+  <h2>תרגיל 3 — תכונות מקדם המתאם</h2>
+  <div class="example" style="background:#fff">
+    חוקר בדק קשר בין <strong>משקל</strong> (x בק"ג) ל<strong>גובה</strong> (y בס"מ) של 100 אנשים. קיבל $r = 0.65$.<br><br>
+    א. מה משמעות המקדם? (עוצמה וכיוון)<br>
+    ב. אם נוסיף 2 ס"מ לגובה של כל אדם — מה יהיה r החדש?<br>
+    ג. אם נכפיל את כל המשקלים ב-2.2 (להמיר לפאונד) — מה יהיה r החדש?<br>
+    ד. אם נהפוך את כיוון המשתנה ונחשב $-y$ במקום $y$ — מה יהיה r?
+  </div>
+  <h4>פתרון:</h4>
+  <div class="step"><div class="step-num">א</div><div class="step-content">
+    $r = 0.65$ → קשר לינארי <strong>חיובי</strong> (כש-x גדל, y גדל בממוצע) בעוצמה <strong>בינונית-חזקה</strong>.
+  </div></div>
+  <div class="step"><div class="step-num">ב</div><div class="step-content">
+    הוספת קבוע <em>לא משפיעה</em> על r. → <strong>r נשאר 0.65</strong>
+  </div></div>
+  <div class="step"><div class="step-num">ג</div><div class="step-content">
+    הכפלה בקבוע <em>חיובי</em> לא משפיעה על r. → <strong>r נשאר 0.65</strong>
+  </div></div>
+  <div class="step"><div class="step-num">ד</div><div class="step-content">
+    הכפלה בקבוע <em>שלילי</em> (-1) הופכת את הסימן. → <strong>r = -0.65</strong><br>
+    <span class="hint">העוצמה זהה, רק הכיוון התהפך.</span>
+  </div></div>
+
+  <h2>תרגיל 4 — שימוש בתכונת (x̄, ȳ)</h2>
+  <div class="example" style="background:#fff">
+    במחקר נמצא שמשוואת קו הרגרסיה של y על x היא:<br>
+    <span style="font-size:1.1em">$y = 3x + 7$</span><br>
+    ידוע שממוצע המשתנה x בדגימה הוא $\bar{x} = 8$ וסטיית התקן $\sigma_x = 2$. בנוסף, $r = 0.6$.<br><br>
+    א. מצא את $\bar{y}$.<br>
+    ב. מצא את $\sigma_y$.<br>
+    ג. חזה את ערך y עבור $x = 10$.
+  </div>
+  <h4>פתרון:</h4>
+  <div class="step"><div class="step-num">א</div><div class="step-content">
+    הקו <em>עובר דרך</em> $(\bar{x}, \bar{y})$, לכן נציב:<br>
+    $\bar{y} = 3 \cdot 8 + 7 = 24 + 7 = \mathbf{31}$
+  </div></div>
+  <div class="step"><div class="step-num">ב</div><div class="step-content">
+    מהנוסחה $a = r \cdot \sigma_y/\sigma_x$ נבודד את $\sigma_y$:<br>
+    $\sigma_y = a \cdot \sigma_x / r = 3 \cdot 2 / 0.6 = 6/0.6 = \mathbf{10}$
+  </div></div>
+  <div class="step"><div class="step-num">ג</div><div class="step-content">
+    $y = 3 \cdot 10 + 7 = \mathbf{37}$
+  </div></div>
+
+  <div class="intro-box" style="margin-top:2rem;text-align:center">
+    <strong style="font-size:1.2rem">✨ טיפ זהב לבגרות</strong><br>
+    זכור את 3 המשוואות הקסומות של רגרסיה: $a = r\sigma_y/\sigma_x$ · $b = \bar{y}-a\bar{x}$ · הקו עובר דרך $(\bar{x},\bar{y})$.<br>
+    עם שלוש אלה — תענה על כל שאלת רגרסיה בבגרות.
   </div>
 </div>
 
